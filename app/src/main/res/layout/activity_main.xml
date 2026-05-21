@@ -30,7 +30,6 @@
         style="@style/edit_15"
         android:layout_marginTop="20dp"
         android:hint="Password"
-
         />
 
 

@@ -12,7 +12,7 @@
         <item name="android:layout_marginHorizontal">20dp</item>
         <item name="android:padding">15dp</item>
         <item name="android:background">@drawable/custom_background</item>
-        <item name="android:textColorHint">@color/black</item>">
+        <item name="android:textColorHint">@color/grey</item>">
     </style>
 
     <style name="text_30" parent="Widget.AppCompat.TextView">
