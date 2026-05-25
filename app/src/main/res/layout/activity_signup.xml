@@ -26,24 +26,29 @@
             />
 
         <EditText
+            android:id="@+id/signup_name"
             style="@style/edit_15"
             android:layout_marginTop="60dp"
             android:hint="Name"
             />
 
         <EditText
+            android:id="@+id/signup_email"
             style="@style/edit_15"
             android:layout_marginTop="20dp"
             android:hint="Email"
             />
 
         <EditText
+            android:id="@+id/signup_contact"
             style="@style/edit_15"
             android:layout_marginTop="20dp"
             android:hint="Contact"
+            android:maxLength="10"
             />
 
         <EditText
+            android:id="@+id/signup_password"
             style="@style/edit_15"
             android:layout_marginTop="20dp"
             android:hint="Password"
@@ -51,6 +56,7 @@
             />
 
         <EditText
+            android:id="@+id/signup_confirm_password"
             style="@style/edit_15"
             android:layout_marginTop="20dp"
             android:hint="Confirm Password"
