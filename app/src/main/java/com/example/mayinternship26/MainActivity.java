@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView create_new_account, forget_password;
     Button button_sign_in;
+    String emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
 
     EditText login_email, login_password;
 
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
                     login_email.setError("Email Required");
                 }
 
+                else if(!login_email.getText().toString().matches(emailPattern)){
+                    login_email.setError("Invalid Email Address");
+                }
                 else if(login_password.getText().toString().trim().equals("")){
                     login_password.setError("Password Required");
                 }

@@ -20,6 +20,7 @@ public class SignupActivity extends AppCompatActivity {
     Button button_sign_up;
 
     String EmailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
+    String password_pattern = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

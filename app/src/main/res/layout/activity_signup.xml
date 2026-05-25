@@ -37,6 +37,7 @@
             style="@style/edit_15"
             android:layout_marginTop="20dp"
             android:hint="Email"
+            android:inputType="textEmailAddress"
             />
 
         <EditText
@@ -45,6 +46,7 @@
             android:layout_marginTop="20dp"
             android:hint="Contact"
             android:maxLength="10"
+            android:inputType="phone"
             />
 
         <EditText
