@@ -1,6 +1,8 @@
 package com.example.mayinternship26;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +26,17 @@ public class MainActivity extends AppCompatActivity {
 
     EditText login_email, login_password;
 
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = openOrCreateDatabase("MayInternship26", MODE_PRIVATE, null);
+        String userTable = "CREATE TABLE IF NOT EXISTS user(userid INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " name VARCHAR(50), email VARCHAR(100), contact VARCHAR(10), password VARCHAR(20))";
+        db.execSQL(userTable);
 
         create_new_account = findViewById(R.id.create_new_account);
         forget_password = findViewById(R.id.forget_password);
@@ -35,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         login_email = findViewById(R.id.login_email);
         login_password = findViewById(R.id.login_password);
-
-
 
 
         create_new_account.setOnClickListener(new View.OnClickListener() {
@@ -72,12 +79,23 @@ public class MainActivity extends AppCompatActivity {
                     login_password.setError("Password Required");
                 }
 
-                else if(login_password.getText().toString().trim().length()<8){
+                else if(login_password.getText().toString().trim().length()<6){
                     login_password.setError("Minimum 8 Characters Required");
                 }
 
                 else{
-                    Toast.makeText(MainActivity.this, "Login Succesfully", Toast.LENGTH_LONG).show();
+
+                    String checkUser = "SELECT * FROM user WHERE email='"+login_email.getText().toString()+"' AND password='"+login_password.getText().toString()+"'";
+//                    db.execSQL(checkUser);
+
+                    Cursor cursor = db.rawQuery(checkUser, null);
+
+                    if(cursor.getCount()>0){
+                        Toast.makeText(MainActivity.this, "Login Succesfully", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Invalid Email or Password", Toast.LENGTH_LONG).show();
+                    }
                 }
 
 
