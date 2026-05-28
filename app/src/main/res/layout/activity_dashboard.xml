@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DashboardActivity">
+
+
+
+    <TextView
+        style="@style/text_30"
+        android:text="Welcome User"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="40dp"
+        />
+
+
+    <Button
+        android:id="@+id/dashboard_delete"
+        style="@style/button_20"
+        android:text="Delete Profile"
+        app:backgroundTint="@null"
+        />
+
+    <Button
+        android:id="@+id/dashboard_logout"
+        style="@style/button_20"
+        android:text="Logout"
+        app:backgroundTint="@null"
+        />
+
+</LinearLayout>

@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        db = openOrCreateDatabase("MayInternship26", MODE_PRIVATE, null);
+        db = openOrCreateDatabase("MayInternship26.db", MODE_PRIVATE, null);
         String userTable = "CREATE TABLE IF NOT EXISTS user(userid INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " name VARCHAR(50), email VARCHAR(100), contact VARCHAR(10), password VARCHAR(20))";
         db.execSQL(userTable);

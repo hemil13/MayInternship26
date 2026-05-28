@@ -1,5 +1,7 @@
 package com.example.mayinternship26;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,10 +20,17 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     String emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
 
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+
+        db = openOrCreateDatabase("MayInternship26.db", MODE_PRIVATE, null);
+        String userTable = "CREATE TABLE IF NOT EXISTS user(userid INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " name VARCHAR(50), email VARCHAR(100), contact VARCHAR(10), password VARCHAR(20))";
+        db.execSQL(userTable);
 
         forget_password = findViewById(R.id.button_forget_password);
         email = findViewById(R.id.fp_email);
@@ -44,7 +53,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     newPassword.setError("Password is required");
                 }
 
-                else if(newPassword.getText().toString().length()<8){
+                else if(newPassword.getText().toString().length()<6){
                     newPassword.setError("Minimum 8 characters required");
                 }
 
@@ -57,8 +66,22 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 }
 
                 else{
-                    Toast.makeText(ForgetPasswordActivity.this, "Password Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+
+                    String checkUser = "SELECT * FROM user WHERE email = '"+email.getText().toString()+"'";
+                    Cursor cursor = db.rawQuery(checkUser, null);
+
+                    if(cursor.getCount()>0){
+                        String updateUser = "UPDATE user SET password = '"+newPassword.getText().toString()+"' WHERE email = '"+email.getText().toString()+"'";
+                        db.execSQL(updateUser);
+
+                        Toast.makeText(ForgetPasswordActivity.this, "Password Updated Successfully!", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                    else{
+                        Toast.makeText(ForgetPasswordActivity.this, "Invalid Email Id", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
 
             }
