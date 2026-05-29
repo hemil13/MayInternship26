@@ -98,11 +98,22 @@ public class MainActivity extends AppCompatActivity {
                     Cursor cursor = db.rawQuery(checkUser, null);
 
                     if(cursor.getCount()>0){
+
+
+                        while (cursor.moveToNext()){
+                            sp.edit().putString(ConstantSp.userid, String.valueOf(cursor.getInt(0))).commit();
+                            sp.edit().putString(ConstantSp.name, cursor.getString(1)).commit();
+                            sp.edit().putString(ConstantSp.email, cursor.getString(2)).commit();
+                            sp.edit().putString(ConstantSp.conatct, cursor.getString(3)).commit();
+                            sp.edit().putString(ConstantSp.password, cursor.getString(4)).commit();
+                        }
+
+
                         Toast.makeText(MainActivity.this, "Login Succesfully", Toast.LENGTH_LONG).show();
+
                         Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
                         startActivity(intent);
 
-                        sp.edit().putString("email", login_email.getText().toString()).commit();
                     }
                     else {
                         Toast.makeText(MainActivity.this, "Invalid Email or Password", Toast.LENGTH_LONG).show();

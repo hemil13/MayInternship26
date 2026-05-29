@@ -11,6 +11,7 @@
 
 
     <TextView
+        android:id="@+id/dashboard_welcome"
         style="@style/text_30"
         android:text="Welcome User"
         android:layout_marginTop="90dp"
@@ -29,6 +30,13 @@
         android:id="@+id/dashboard_logout"
         style="@style/button_20"
         android:text="Logout"
+        app:backgroundTint="@null"
+        />
+
+    <Button
+        android:id="@+id/dashboard_profile"
+        style="@style/button_20"
+        android:text="Profile"
         app:backgroundTint="@null"
         />
 
