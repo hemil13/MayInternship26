@@ -40,4 +40,12 @@
         app:backgroundTint="@null"
         />
 
+
+    <Button
+        android:id="@+id/dashboard_category"
+        style="@style/button_20"
+        android:text="Category"
+        app:backgroundTint="@null"
+        />
+
 </LinearLayout>
