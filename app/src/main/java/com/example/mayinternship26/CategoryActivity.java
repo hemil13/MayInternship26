@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -26,7 +27,9 @@ public class CategoryActivity extends AppCompatActivity {
 
         recycler = findViewById(R.id.category_recycler);
 
-        recycler.setLayoutManager(new LinearLayoutManager(CategoryActivity.this));
+//        recycler.setLayoutManager(new LinearLayoutManager(CategoryActivity.this));
+//        recycler.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+        recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         CategoryAdapter adapter = new CategoryAdapter(CategoryActivity.this,idArray, nameArray, imageArray);
         recycler.setAdapter(adapter);

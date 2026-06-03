@@ -3,30 +3,29 @@ package com.example.mayinternship26;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyHolder> {
+public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.MyHolder> {
     Context context;
-    int[] idArray;
+    int[] subIdArray;
+    int[] catIdArray;
     String[] nameArray;
     int[] imageArray;
 
     SharedPreferences sp;
 
-    public CategoryAdapter(Context context, int[] idArray, String[] nameArray, int[] imageArray) {
+    public SubCategoryAdapter(Context context, int[] subIdArray, int[] catIdArray, String[] nameArray, int[] imageArray) {
         this.context = context;
-        this.idArray = idArray;
+        this.subIdArray = subIdArray;
+        this.catIdArray = catIdArray;
         this.nameArray = nameArray;
         this.imageArray = imageArray;
 
@@ -35,9 +34,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyHold
 
     @NonNull
     @Override
-    public CategoryAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SubCategoryAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
-        return new MyHolder(view);
+        return new SubCategoryAdapter.MyHolder(view);
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
@@ -48,29 +47,24 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyHold
 
             image = itemView.findViewById(R.id.item_category_image);
             name = itemView.findViewById(R.id.item_category_name);
+
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.MyHolder holder, int position) {
-        holder.name.setText(nameArray[position]);
-        holder.image.setImageResource(imageArray[position]);
+    public void onBindViewHolder(@NonNull SubCategoryAdapter.MyHolder holder, int position) {
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Toast.makeText(context, "You clicked on "+nameArray[position], Toast.LENGTH_SHORT).show();
 
-                sp.edit().putString(ConstantSp.categoryId, String.valueOf(idArray[position])).commit();
-
-                Intent intent = new Intent(context, SubCategoryActivity.class);
-                context.startActivity(intent);
-            }
-        });
+        if(catIdArray[position] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
+            holder.name.setText(nameArray[position]);
+            holder.image.setImageResource(imageArray[position]);
+        }
     }
 
     @Override
     public int getItemCount() {
         return imageArray.length;
     }
+
+
 }

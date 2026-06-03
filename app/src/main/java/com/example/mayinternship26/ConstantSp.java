@@ -9,5 +9,7 @@ public class ConstantSp {
     public static final String conatct = "CONTACT";
     public static final String password = "PASSWORD";
 
+    public static final String categoryId = "CATEGORYID";
+
 
 }
