@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     String[] nameArray;
     int[] imageArray;
 
+    int count=0;
+
     SharedPreferences sp;
 
     public SubCategoryAdapter(Context context, int[] subIdArray, int[] catIdArray, String[] nameArray, int[] imageArray) {
@@ -30,6 +33,11 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         this.imageArray = imageArray;
 
         sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
+        for(int i=0; i<subIdArray.length; i++){
+            if(subIdArray[i] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
+                count++;
+            }
+        }
     }
 
     @NonNull
@@ -53,8 +61,6 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull SubCategoryAdapter.MyHolder holder, int position) {
-
-
         if(catIdArray[position] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
             holder.name.setText(nameArray[position]);
             holder.image.setImageResource(imageArray[position]);
@@ -63,7 +69,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     @Override
     public int getItemCount() {
-        return imageArray.length;
+        return count;
     }
 
 
