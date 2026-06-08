@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.MyHolder> {
     Context context;
@@ -21,23 +24,27 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     String[] nameArray;
     int[] imageArray;
 
+    ArrayList<SubCategoryList> arraylist;
+
     int count=0;
 
     SharedPreferences sp;
 
-    public SubCategoryAdapter(Context context, int[] subIdArray, int[] catIdArray, String[] nameArray, int[] imageArray) {
-        this.context = context;
-        this.subIdArray = subIdArray;
-        this.catIdArray = catIdArray;
-        this.nameArray = nameArray;
-        this.imageArray = imageArray;
+//    public SubCategoryAdapter(Context context, int[] subIdArray, int[] catIdArray, String[] nameArray, int[] imageArray) {
+//        this.context = context;
+//        this.subIdArray = subIdArray;
+//        this.catIdArray = catIdArray;
+//        this.nameArray = nameArray;
+//        this.imageArray = imageArray;
+//
+//        sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
+//
+//    }
 
-        sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
-        for(int i=0; i<subIdArray.length; i++){
-            if(subIdArray[i] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
-                count++;
-            }
-        }
+    public SubCategoryAdapter(Context context, ArrayList<SubCategoryList> arrayList) {
+        this.context = context;
+        this.arraylist = arrayList;
+
     }
 
     @NonNull
@@ -61,15 +68,26 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull SubCategoryAdapter.MyHolder holder, int position) {
-        if(catIdArray[position] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
-            holder.name.setText(nameArray[position]);
-            holder.image.setImageResource(imageArray[position]);
-        }
+//        if(catIdArray[position] == Integer.parseInt(sp.getString(ConstantSp.categoryId,""))){
+//            holder.name.setText(nameArray[position]);
+//            holder.image.setImageResource(imageArray[position]);
+//        }
+
+        holder.image.setImageResource(arraylist.get(position).getImage());
+        holder.name.setText(arraylist.get(position).getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Clicked on "+arraylist.get(position).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        return count;
+        return arraylist.size();
     }
 
 
