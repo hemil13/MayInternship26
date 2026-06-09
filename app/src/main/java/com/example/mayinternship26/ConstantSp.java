@@ -10,6 +10,7 @@ public class ConstantSp {
     public static final String password = "PASSWORD";
 
     public static final String categoryId = "CATEGORYID";
+    public static final String subcategoryId = "SUBCATEGORYID";
 
 
 }

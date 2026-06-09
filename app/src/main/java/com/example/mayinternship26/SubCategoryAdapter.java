@@ -3,6 +3,7 @@ package com.example.mayinternship26;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,7 +80,10 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Clicked on "+arraylist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                sp.edit().putString(ConstantSp.subcategoryId, String.valueOf(arraylist.get(position).getSubcategoryid())).commit();
+//                Toast.makeText(context, "Clicked on "+arraylist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ProductActivity.class);
+                context.startActivity(intent);
             }
         });
 
