@@ -12,5 +12,7 @@ public class ConstantSp {
     public static final String categoryId = "CATEGORYID";
     public static final String subcategoryId = "SUBCATEGORYID";
 
+    public static final String symbol = "₹";
+
 
 }

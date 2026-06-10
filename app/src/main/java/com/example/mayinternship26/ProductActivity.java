@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,7 +64,7 @@ public class ProductActivity extends AppCompatActivity {
         recycler = findViewById(R.id.product_recycler);
 
         for (int i = 0; i<subIdArray.length; i++){
-            String checkProduct = "SELECT * FROM product WHERE name = '"+nameArray[i]+"' AND subcategoryid = '"+subIdArray[i]+"";
+            String checkProduct = "SELECT * FROM product WHERE name = '"+nameArray[i]+"' AND subcategoryid = '"+subIdArray[i]+"'";
             Cursor cursor = db.rawQuery(checkProduct, null);
             if(cursor.getCount() == 0){
                 String insertProduct = "INSERT INTO product VALUES (null, '"+subIdArray[i]+"','"+nameArray[i]+"'," +
@@ -74,7 +75,7 @@ public class ProductActivity extends AppCompatActivity {
         }
 
 
-        String getProduct = "SELECT * FROM product WHERE subcategoryid = '"+sp.getString(ConstantSp.subcategoryId, "")+"'";
+        String getProduct = "SELECT * FROM product WHERE subcategoryid = '"+sp.getString(ConstantSp.subcategoryId,"")+"'";
         Cursor cursor = db.rawQuery(getProduct, null);
         arrayList = new ArrayList<>();
         if(cursor.getCount()>0){
@@ -89,8 +90,10 @@ public class ProductActivity extends AppCompatActivity {
                 list.setDescription(cursor.getString(6));
 
                 arrayList.add(list);
+
             }
-            SubCategoryAdapter adapter = new SubCategoryAdapter(ProductActivity.this,arrayList);
+            Log.d("ProductArray", String.valueOf(arrayList.get(0).getName()));
+            ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList);
             recycler.setAdapter(adapter);
         }
 

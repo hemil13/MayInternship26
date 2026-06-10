@@ -46,6 +46,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         this.context = context;
         this.arraylist = arrayList;
 
+        sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
+
     }
 
     @NonNull
