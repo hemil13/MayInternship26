@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".ProductDetailActivity">
+
+    <ImageView
+        android:id="@+id/product_detail_image"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_250sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20sp"
+        />
+
+    <TextView
+        android:id="@+id/product_detail_name"
+        style="@style/text_30"
+        android:gravity="start"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/product_detail_original_price"
+            style="@style/text_18"
+            android:layout_width="wrap_content"
+            android:text="100"
+            />
+        <TextView
+            android:id="@+id/product_detail_discounted_price"
+            style="@style/text_20"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/_22sdp"
+            android:text="99"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/product_detail_description"
+       style="@style/text_20"
+        android:text="Descrition"
+        android:gravity="start"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        />
+
+
+
+
+    <Button
+        android:id="@+id/product_detail_buy_now"
+        style="@style/button_20"
+        app:backgroundTint="@null"
+        android:text="Buy Now"
+        />
+
+</LinearLayout>
