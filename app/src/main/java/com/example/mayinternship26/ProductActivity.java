@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class ProductActivity extends AppCompatActivity {
 
         recycler = findViewById(R.id.product_recycler);
 
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+
         for (int i = 0; i<subIdArray.length; i++){
             String checkProduct = "SELECT * FROM product WHERE name = '"+nameArray[i]+"' AND subcategoryid = '"+subIdArray[i]+"'";
             Cursor cursor = db.rawQuery(checkProduct, null);
@@ -92,7 +95,7 @@ public class ProductActivity extends AppCompatActivity {
                 arrayList.add(list);
 
             }
-            Log.d("ProductArray", String.valueOf(arrayList.get(0).getName()));
+
             ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList);
             recycler.setAdapter(adapter);
         }

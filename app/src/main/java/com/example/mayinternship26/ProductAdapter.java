@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +50,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
 
     @Override
     public void onBindViewHolder(@NonNull ProductAdapter.MyHolder holder, int position) {
+
         holder.image.setImageResource(arrayList.get(position).getImage());
         holder.name.setText(arrayList.get(position).getName());
         holder.originalPrice.setText(ConstantSp.symbol+arrayList.get(position).getOriginalPrice());
         holder.discountedPrice.setText(ConstantSp.symbol+arrayList.get(position).getDiscountedPrice());
 
-        holder.originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
     }
 
