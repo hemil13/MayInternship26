@@ -2,6 +2,8 @@ package com.example.mayinternship26;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,10 +27,14 @@ import org.json.JSONObject;
 
 public class ProductDetailActivity extends AppCompatActivity implements PaymentResultWithDataListener {
     Button BuyNow;
-    ImageView image;
+    ImageView image, wishlist;
     TextView name, originalPrice, discountedPrice, description;
 
     SharedPreferences sp;
+
+    Boolean isWishlist = false;
+
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,25 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         setContentView(R.layout.activity_product_detail);
 
         sp = getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
+        db = openOrCreateDatabase("MayInternship26.db", MODE_PRIVATE, null);
+        String userTable = "CREATE TABLE IF NOT EXISTS user(userid INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " name VARCHAR(50), email VARCHAR(100), contact VARCHAR(10), password VARCHAR(20))";
+        db.execSQL(userTable);
+
+        String categoryTable = "CREATE TABLE IF NOT EXISTS category(categoryid INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50), image VARCHAR)";
+        db.execSQL(categoryTable);
+
+        String subcategoryTable = "CREATE TABLE IF NOT EXISTS subcategory(subcategoryid INTEGER PRIMARY KEY AUTOINCREMENT, categoryid INTEGER(10),name VARCHAR(50), image VARCHAR)";
+        db.execSQL(subcategoryTable);
+
+        String productTable = "CREATE TABLE IF NOT EXISTS product(productid INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "subcategoryid INTEGER(10), name VARCHAR(50), image VARCHAR, " +
+                "originalPrice INTEGER(10), discountedPrice INTEGER(10), description VARCHAR(100))";
+        db.execSQL(productTable);
+
+        String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist(wishlistId INTEGER PRIMARY KEY AUTOINCREMENT, productId VARCHAR(10))";
+        db.execSQL(wishlistTable);
+
 
         BuyNow = findViewById(R.id.product_detail_buy_now);
         image = findViewById(R.id.product_detail_image);
@@ -43,6 +68,7 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         originalPrice = findViewById(R.id.product_detail_original_price);
         discountedPrice = findViewById(R.id.product_detail_discounted_price);
         description = findViewById(R.id.product_detail_description);
+        wishlist = findViewById(R.id.product_detail_wishlist_empty);
 
         originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -54,12 +80,46 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         description.setText(sp.getString(ConstantSp.productDescription,""));
 
 
+        String checkWishlist = "SELECT * FROM wishlist WHERE productId = '"+sp.getString(ConstantSp.productId,"")+"'";
+        Cursor wishlistCursor = db.rawQuery(checkWishlist, null);
+        if(wishlistCursor.getCount()>0){
+            isWishlist = true;
+            wishlist.setImageResource(R.drawable.wishlist_fill);
+        }
+
 
 
         BuyNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startpayment();
+            }
+        });
+
+
+
+        wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isWishlist){
+                    String insertWishlist = "INSERT INTO wishlist VALUES (null, '"+sp.getString(ConstantSp.productId,"")+"')";
+                    db.execSQL(insertWishlist);
+
+                    isWishlist = true;
+                    Toast.makeText(ProductDetailActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                    wishlist.setImageResource(R.drawable.wishlist_fill);
+                }
+                else{
+                    String deleteWishlist = "DELETE FROM wishlist WHERE productId = '"+sp.getString(ConstantSp.productId,"")+"'";
+                    db.execSQL(deleteWishlist);
+
+
+                    isWishlist = false;
+                    Toast.makeText(ProductDetailActivity.this, "Removed From wishlist", Toast.LENGTH_SHORT).show();
+                    wishlist.setImageResource(R.drawable.wishlist_empty);
+                }
+
+
             }
         });
 
