@@ -61,6 +61,9 @@ public class ProductActivity extends AppCompatActivity {
                 "originalPrice INTEGER(10), discountedPrice INTEGER(10), description VARCHAR(100))";
         db.execSQL(productTable);
 
+        String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist(wishlistId INTEGER PRIMARY KEY AUTOINCREMENT, productId VARCHAR(10))";
+        db.execSQL(wishlistTable);
+
 
         recycler = findViewById(R.id.product_recycler);
 
@@ -96,7 +99,7 @@ public class ProductActivity extends AppCompatActivity {
 
             }
 
-            ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList);
+            ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList, db);
             recycler.setAdapter(adapter);
         }
 

@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +26,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
     ArrayList<ProductList> arrayList;
     SharedPreferences sp;
 
-    public ProductAdapter(Context context, ArrayList<ProductList> arrayList) {
+    SQLiteDatabase db;
+
+//    public ProductAdapter(Context context, ArrayList<ProductList> arrayList) {
+//        this.context = context;
+//        this.arrayList = arrayList;
+//        sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
+//    }
+
+
+    public ProductAdapter(Context context, ArrayList<ProductList> arrayList, SQLiteDatabase db) {
         this.context = context;
         this.arrayList = arrayList;
+        this.db = db;
         sp = context.getSharedPreferences(ConstantSp.pref, MODE_PRIVATE);
     }
 
