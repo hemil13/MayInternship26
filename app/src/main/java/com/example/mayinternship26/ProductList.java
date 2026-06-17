@@ -2,7 +2,16 @@ package com.example.mayinternship26;
 
 public class ProductList {
     int productid, subId, originalPrice, discountedPrice, image;
-    String name;
+    String name, description;
+    boolean isWishlist;
+
+    public boolean isWishlist() {
+        return isWishlist;
+    }
+
+    public void setWishlist(boolean wishlist) {
+        isWishlist = wishlist;
+    }
 
     public String getDescription() {
         return description;
@@ -59,6 +68,4 @@ public class ProductList {
     public void setProductid(int productid) {
         this.productid = productid;
     }
-
-    String description;
 }

@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
@@ -50,7 +52,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
     }
 
     public class MyHolder extends RecyclerView.ViewHolder {
-        ImageView image;
+        ImageView image, wishlist;
         TextView name, originalPrice, discountedPrice;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +60,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
             name = itemView.findViewById(R.id.item_product_name);
             originalPrice = itemView.findViewById(R.id.item_product_original_price);
             discountedPrice = itemView.findViewById(R.id.item_product_discounted_price);
+            wishlist = itemView.findViewById(R.id.item_product_wishlist);
         }
     }
 
@@ -70,6 +73,35 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
         holder.discountedPrice.setText(ConstantSp.symbol+arrayList.get(position).getDiscountedPrice());
 
         holder.originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
+        if(arrayList.get(position).isWishlist()){
+            holder.wishlist.setImageResource(R.drawable.wishlist_fill);
+        }
+        else{
+            holder.wishlist.setImageResource(R.drawable.wishlist_empty);
+        }
+
+        holder.wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(arrayList.get(position).isWishlist()){
+                    String deleteWishlist = "DELETE FROM wishlist WHERE productId = '"+arrayList.get(position).getProductid()+"'";
+                    db.execSQL(deleteWishlist);
+                    arrayList.get(position).setWishlist(false);
+                    holder.wishlist.setImageResource(R.drawable.wishlist_empty);
+                    Toast.makeText(context, "Removed from wishlist", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                }
+                else{
+                    String insertWishlist = "INSERT INTO wishlist VALUES (null, '"+arrayList.get(position).getProductid()+"')";
+                    db.execSQL(insertWishlist);
+                    arrayList.get(position).setWishlist(true);
+                    holder.wishlist.setImageResource(R.drawable.wishlist_fill);
+                    Toast.makeText(context, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                }
+            }
+        });
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

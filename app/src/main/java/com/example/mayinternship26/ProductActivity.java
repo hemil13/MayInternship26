@@ -39,6 +39,7 @@ public class ProductActivity extends AppCompatActivity {
     RecyclerView recycler;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,16 @@ public class ProductActivity extends AppCompatActivity {
                 list.setOriginalPrice(cursor.getInt(4));
                 list.setDiscountedPrice(cursor.getInt(5));
                 list.setDescription(cursor.getString(6));
+
+                String checkWishlist = "SELECT * FROM wishlist WHERE productId = '"+cursor.getString(0)+"'";
+                Cursor wishCursor = db.rawQuery(checkWishlist, null);
+
+                if(wishCursor.getCount()>0){
+                    list.setWishlist(true);
+                }
+                else{
+                    list.setWishlist(false);
+                }
 
                 arrayList.add(list);
 
