@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,14 +28,18 @@ import org.json.JSONObject;
 
 public class ProductDetailActivity extends AppCompatActivity implements PaymentResultWithDataListener {
     Button BuyNow;
-    ImageView image, wishlist;
-    TextView name, originalPrice, discountedPrice, description;
+    ImageView image, wishlist, minus, plus, cart;
+    TextView name, originalPrice, discountedPrice, description, qty;
+
+    LinearLayout cart_layout;
 
     SharedPreferences sp;
 
     Boolean isWishlist = false;
 
     SQLiteDatabase db;
+
+    int cart_qty = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,12 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         discountedPrice = findViewById(R.id.product_detail_discounted_price);
         description = findViewById(R.id.product_detail_description);
         wishlist = findViewById(R.id.product_detail_wishlist_empty);
+
+        cart_layout = findViewById(R.id.product_detail_cart_layout);
+        minus = findViewById(R.id.product_detail_cart_minus);
+        plus = findViewById(R.id.product_detail_cart_add);
+        qty = findViewById(R.id.product_detail_cart_qty);
+        cart = findViewById(R.id.product_detail_cart);
 
         originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -123,6 +134,41 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             }
         });
 
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cart_layout.setVisibility(View.VISIBLE);
+                cart.setVisibility(View.GONE);
+                Toast.makeText(ProductDetailActivity.this, "Item Added to Cart", Toast.LENGTH_SHORT).show();
+                cart_qty = 1;
+            }
+        });
+
+
+
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cart_qty++;
+                qty.setText(String.valueOf(cart_qty));
+            }
+        });
+
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cart_qty--;
+                if(cart_qty>0){
+                    qty.setText(String.valueOf(cart_qty));
+                }
+                else{
+                    Toast.makeText(ProductDetailActivity.this, "Item Removed From Cart", Toast.LENGTH_SHORT).show();
+                    cart_layout.setVisibility(View.GONE);
+                    cart.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
 
     }
 
