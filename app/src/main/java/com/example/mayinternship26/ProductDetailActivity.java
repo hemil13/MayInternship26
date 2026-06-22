@@ -29,7 +29,7 @@ import org.json.JSONObject;
 public class ProductDetailActivity extends AppCompatActivity implements PaymentResultWithDataListener {
     Button BuyNow;
     ImageView image, wishlist, minus, plus, cart;
-    TextView name, originalPrice, discountedPrice, description, qty;
+    TextView name, originalPrice, discountedPrice, description, qty, totalAmount;
 
     LinearLayout cart_layout;
 
@@ -66,6 +66,8 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist(wishlistId INTEGER PRIMARY KEY AUTOINCREMENT, productId VARCHAR(10))";
         db.execSQL(wishlistTable);
 
+        String cartTable = "CREATE TABLE IF NOT EXISTS cart(" +"cartid INTEGER PRIMARY KEY AUTOINCREMENT," +"orderid INTEGER(10)," +"productid VARCHAR(10)," +" qty INTEGER(3)," +"price INTEGER(10)," +" totalPrice INTEGER(10))";
+        db.execSQL(cartTable);
 
         BuyNow = findViewById(R.id.product_detail_buy_now);
         image = findViewById(R.id.product_detail_image);
@@ -80,6 +82,7 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         plus = findViewById(R.id.product_detail_cart_add);
         qty = findViewById(R.id.product_detail_cart_qty);
         cart = findViewById(R.id.product_detail_cart);
+        totalAmount = findViewById(R.id.product_detail_total_amount);
 
         originalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -90,6 +93,25 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         discountedPrice.setText(ConstantSp.symbol+sp.getInt(ConstantSp.productDiscountedPrice,0));
         description.setText(sp.getString(ConstantSp.productDescription,""));
 
+
+        //Ccheck
+        String checkCart = "SELECT * FROM cart WHERE productId='" + sp.getString(ConstantSp.productId,"") + "' AND orderid='0'";
+
+        Cursor cartCursor = db.rawQuery(checkCart,null);
+
+        if(cartCursor.moveToFirst())
+        {
+            cart_qty = cartCursor.getInt(3);
+
+            qty.setText(String.valueOf(cart_qty));
+
+            int total = cartCursor.getInt(5);
+
+            totalAmount.setText("Total: $" + total);
+
+            cart.setVisibility(View.GONE);
+            cart_layout.setVisibility(View.VISIBLE);
+        }
 
         String checkWishlist = "SELECT * FROM wishlist WHERE productId = '"+sp.getString(ConstantSp.productId,"")+"'";
         Cursor wishlistCursor = db.rawQuery(checkWishlist, null);
@@ -134,13 +156,37 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             }
         });
 
+//        cart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                cart_layout.setVisibility(View.VISIBLE);
+//                cart.setVisibility(View.GONE);
+//                Toast.makeText(ProductDetailActivity.this, "Item Added to Cart", Toast.LENGTH_SHORT).show();
+//                cart_qty = 1;
+//            }
+//        });
+
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                cart_qty = 1;
+
+                int price = sp.getInt(ConstantSp.productDiscountedPrice,0);
+
+                int totalPrice = cart_qty * price;
+
+                String insertCart = "INSERT INTO cart VALUES(NULL,'0','"+ sp.getString(ConstantSp.productId,"")+ "','" + cart_qty+ "','" + price+ "','" + totalPrice + "')";
+
+                db.execSQL(insertCart);
+
+                qty.setText(String.valueOf(cart_qty));
+
+                totalAmount.setText("Total: $" + totalPrice);
+
                 cart_layout.setVisibility(View.VISIBLE);
                 cart.setVisibility(View.GONE);
-                Toast.makeText(ProductDetailActivity.this, "Item Added to Cart", Toast.LENGTH_SHORT).show();
-                cart_qty = 1;
+
+                Toast.makeText(ProductDetailActivity.this, "Item Added to cart", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -150,23 +196,46 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             @Override
             public void onClick(View view) {
                 cart_qty++;
-                qty.setText(String.valueOf(cart_qty));
+               updateCart(cart_qty,"update");
             }
         });
+
+//        minus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                cart_qty--;
+//                if(cart_qty>0){
+//                    updateCart(cart_qty,"update");
+//                }
+//                else{
+//                    updateCart(0,"delete");
+//                    Toast.makeText(ProductDetailActivity.this, "Item Removed From Cart", Toast.LENGTH_SHORT).show();
+//                    cart_layout.setVisibility(View.GONE);
+//                    cart.setVisibility(View.VISIBLE);
+//                }
+//
+//            }
+//        });
 
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cart_qty--;
-                if(cart_qty>0){
-                    qty.setText(String.valueOf(cart_qty));
-                }
-                else{
-                    Toast.makeText(ProductDetailActivity.this, "Item Removed From Cart", Toast.LENGTH_SHORT).show();
-                    cart_layout.setVisibility(View.GONE);
-                    cart.setVisibility(View.VISIBLE);
-                }
 
+                cart_qty--;
+
+                if(cart_qty > 0)
+                {
+                    updateCart(cart_qty,"update");
+                }
+                else
+                {
+                    // Remove item completely
+                    updateCart(0,"delete");
+
+                    Toast.makeText(ProductDetailActivity.this,
+                            "Item Removed From Cart",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -188,7 +257,15 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             //You can omit the image option to fetch the image from dashboard
             options.put("image", R.mipmap.ic_launcher);
             options.put("currency", "INR");
-            options.put("amount", String.valueOf(sp.getInt(ConstantSp.productDiscountedPrice,0) * 100));
+//            options.put("amount", String.valueOf(sp.getInt(ConstantSp.productDiscountedPrice,0) * 100));
+
+
+            int quantity = cart_qty;
+            if (quantity == 0){
+                quantity = 1;
+            }
+            int finalAmount = quantity * sp.getInt(ConstantSp.productDiscountedPrice,0);
+            options.put("amount", String.valueOf(finalAmount * 100));
 
             JSONObject preFill = new JSONObject();
             preFill.put("email", "hemigarala@gmail.com");
@@ -202,6 +279,28 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         }
     }
 
+
+    private void updateCart(int qtyValue, String action){
+        int price = sp.getInt(ConstantSp.productDiscountedPrice,0);
+        int totalPrice = qtyValue * price;
+        if (action.equalsIgnoreCase("update"))
+        {
+            String updateQuery =
+                    "UPDATE cart SET qty='" + qtyValue +"', totalPrice='" + totalPrice + "' WHERE productId='" +sp.getString(ConstantSp.productId,"") +"' AND orderid='0'";
+
+            db.execSQL(updateQuery);
+            qty.setText(String.valueOf(qtyValue));
+            totalAmount.setText("Total: $"+ totalPrice);
+        }
+        else {
+            String deleteQuery = "DELETE FROM cart WHERE productid='" + sp.getString(ConstantSp.productId,"") + "' AND orderid='0'";
+            db.execSQL(deleteQuery);
+            totalAmount.setText("Total: $0");
+
+            cart_layout.setVisibility(View.GONE);
+            cart.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void onPaymentSuccess(String s, PaymentData paymentData) {
         Toast.makeText(this, "Payment Sucessfull: "+ s, Toast.LENGTH_SHORT).show();
