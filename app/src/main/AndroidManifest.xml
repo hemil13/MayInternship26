@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MayInternship26">
         <activity
+            android:name=".CartActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProductDetailActivity"
             android:exported="false" />
         <activity

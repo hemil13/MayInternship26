@@ -1,6 +1,7 @@
 package com.example.mayinternship26;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +21,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 
 public class ProductDetailActivity extends AppCompatActivity implements PaymentResultWithDataListener {
     Button BuyNow;
+    FloatingActionButton fabCart;
     ImageView image, wishlist, minus, plus, cart;
     TextView name, originalPrice, discountedPrice, description, qty, totalAmount;
 
@@ -69,6 +72,7 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         String cartTable = "CREATE TABLE IF NOT EXISTS cart(" +"cartid INTEGER PRIMARY KEY AUTOINCREMENT," +"orderid INTEGER(10)," +"productid VARCHAR(10)," +" qty INTEGER(3)," +"price INTEGER(10)," +" totalPrice INTEGER(10))";
         db.execSQL(cartTable);
 
+        fabCart = findViewById(R.id.fab_cart);
         BuyNow = findViewById(R.id.product_detail_buy_now);
         image = findViewById(R.id.product_detail_image);
         name = findViewById(R.id.product_detail_name);
@@ -126,6 +130,14 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             @Override
             public void onClick(View view) {
                 startpayment();
+            }
+        });
+
+        fabCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
+                startActivity(intent);
             }
         });
 

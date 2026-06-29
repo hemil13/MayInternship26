@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/_10sdp">
+
+    <ImageView
+        android:id="@+id/cart_item_image"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:scaleType="fitCenter"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/cart_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Name"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/cart_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price : $0"/>
+
+        <TextView
+            android:id="@+id/cart_item_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qty : 1"/>
+
+        <TextView
+            android:id="@+id/cart_item_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total : $0"/>
+
+    </LinearLayout>
+
+</LinearLayout>
